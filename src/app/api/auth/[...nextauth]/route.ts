@@ -5,6 +5,9 @@ import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/dbConnect";
 import UserModel, { User } from "@/models/User";
 import mongoose from "mongoose";
+import { sendEmail } from "@/helper/sendEmail";
+import React from "react";
+import RegistrationSuccess from "../../../../../emails/RegistrationEmail";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -48,12 +51,27 @@ export const authOptions: AuthOptions = {
         await dbConnect();
         const existingUser = await UserModel.findOne({ email: user.email });
         if (!existingUser) {
+
+            const username = user.name || user.email || "User";
+
           await UserModel.create({
-            username: user.name?.split(" ").join("") || user.email,
+            username,
             email: user.email,
             image: user.image,
             password: "", // Social login
           });
+
+          const emailComponent = React.createElement(RegistrationSuccess, {
+      username,
+    });
+
+    
+
+     await sendEmail(
+      user.email!,
+      "Registration Successful",
+      emailComponent
+    );
         }
       }
       return true;

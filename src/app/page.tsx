@@ -2,12 +2,16 @@
 
 import { Button, toast } from "@jamsr-ui/react";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 type ManualUser = {
   username: string;
   email: string;
+  image?: string;
+  _id: string;
+  createdAt: string;
 };
 
 const HomePage = () => {
@@ -69,11 +73,18 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-2xl font-semibold mb-8">
-        Welcome, {user.username || user.name || "User"}
+      <h1 className="text-2xl font-semibold mb-8 capitalize">
+        Welcome, {user.username  || "User"}
       </h1>
       <p>{user.email}</p>
-      <p>{user.id}</p>
+     {user.image && (
+      <Image
+        src={user.image}
+        alt="profile"
+        height={200}
+        width={200}
+      />
+    )}
       <Button variant="outlined" color="danger" size="lg" onClick={handleLogout}>
         Logout
       </Button>
