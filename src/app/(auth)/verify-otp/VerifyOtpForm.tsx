@@ -6,13 +6,13 @@ import {
   toast,
 } from "@jamsr-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import { Logo } from "../../../../public/svg";
 import Link from "next/link";
 import { otpSchema } from "@/schemas/otpSchema";
 import { z } from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Logo } from "@/assets/svg";
 
 type VerifyFormData = z.infer<typeof otpSchema>;
 

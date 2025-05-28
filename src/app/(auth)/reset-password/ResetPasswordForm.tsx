@@ -6,8 +6,8 @@ import { z } from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input, Button, Card, CardContent, toast } from "@jamsr-ui/react";
 import { resetPasswordSchema } from "@/schemas/resetPasswordSchema";
-import {  Logo } from "../../../../public/svg";
 import { useEffect, useState } from "react";
+import { Logo } from "@/assets/svg";
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 

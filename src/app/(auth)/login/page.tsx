@@ -5,10 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { Input, Button, Card, CardContent, Divider, toast } from "@jamsr-ui/react";
-import { GoogleIcon, Logo } from "../../../../public/svg";
 import Link from "next/link";
 import { loginSchema } from "@/schemas/loginSchema";
 import { signIn } from "next-auth/react";
+import { GoogleIcon, Logo } from "@/assets/svg";
 
 type SignInFormData = z.infer<typeof loginSchema>;
 

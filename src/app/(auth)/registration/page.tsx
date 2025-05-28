@@ -7,8 +7,9 @@ import { useRouter } from "next/navigation";
 import { Input, Button, Card, CardContent, Divider, toast } from "@jamsr-ui/react";
 import Link from "next/link";
 import { registrationSchema } from "@/schemas/registrationSchemma";
-import { GoogleIcon, Logo } from "../../../../public/svg";
+
 import { signIn } from "next-auth/react";
+import { GoogleIcon, Logo } from "@/assets/svg";
 
 type SignUpFormData = z.infer<typeof registrationSchema>;
 

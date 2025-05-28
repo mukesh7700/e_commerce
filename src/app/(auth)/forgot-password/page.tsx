@@ -1,13 +1,13 @@
 "use client"
 import { Button, Card, CardContent, Input, toast } from '@jamsr-ui/react'
 import React from 'react'
-import { Logo } from '../../../../public/svg'
 import Link from 'next/link'
 import { forgotPasswordSchema } from '@/schemas/forgotPasswordSchema';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Logo } from '@/assets/svg';
 
 
 type ForgetFormData = z.infer<typeof forgotPasswordSchema>;
