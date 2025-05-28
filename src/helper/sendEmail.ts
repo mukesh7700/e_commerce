@@ -8,18 +8,23 @@ try {
   const emailHtml = await render(emailComponent);
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    
+    host:'mail.jamsrworld.com',
   port: 587,
-  secure: true,
+   // true for 465, false for other ports
      // You can change to another email provider if necessary
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
+    
+    tls: {
+      rejectUnauthorized: false,
+    },
   });
 
   const mailOptions = {
-    from:'process.env.EMAIL_USER',
+    from:process.env.EMAIL_USER,
     to: recipient,
     subject: subject,
     html: emailHtml,  // Make sure this is now a string, not a Promise<string>
