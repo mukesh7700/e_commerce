@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ToastProvider, UIProvider } from "@jamsr-ui/react";
 import SessionWrapper from "@/components/SessionWrapper";
+import { SidebarNested } from "@/components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,18 +26,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" >
+    <html lang="en" className="dark">
       <SessionWrapper>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-       
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           <UIProvider>
             <ToastProvider />
-             {children}
+            <div className="flex flex-row h-screen">
+              <div>
+                <SidebarNested />
+              </div>
+              <div className=" flex justify-center items-center w-full h-full">
+                {/* Main content area */}
+                {children}
+              </div>
+            </div>
           </UIProvider>
-        
-      </body>
+        </body>
       </SessionWrapper>
     </html>
   );
