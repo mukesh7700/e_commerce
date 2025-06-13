@@ -5,3 +5,26 @@
 @source "../../node_modules/@jamsr-ui";
 /* add these two lines */
 
+body{
+  font-family: Public_Sans, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+@layer utilities {
+  .animate-in-from-right {
+    @apply opacity-0 translate-x-10 transition-all duration-700 ease-in;
+  }
+
+  .animate-in-from-bottom {
+    @apply opacity-0 translate-y-10 transition-all duration-700 ease-in;
+  }
+
+  .animate-in-from-left {
+    @apply opacity-0 -translate-x-10 transition-all duration-700 ease-in;
+  }
+
+  .animate-in-show {
+    @apply opacity-100 translate-x-0 translate-y-0;
+  }
+}

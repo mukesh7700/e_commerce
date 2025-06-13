@@ -27,7 +27,8 @@ export async function POST(request: Request) {
     }
 
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, email: user.email,     username: user.username,
+    image: user.image, },
       process.env.SECRET_KEY ?? "default_secret_key_change_this",
       { expiresIn: "1d" }
     );
@@ -36,6 +37,12 @@ export async function POST(request: Request) {
       {
         message: "Signin successful",
         success: true,
+        user: {
+      id: user._id,
+      email: user.email,
+      username: user.username,
+      image: user.image ?? "/default-avatar.png", 
+    },
       },
       { status: 200 }
     );

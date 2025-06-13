@@ -1,5 +1,5 @@
 // src/lib/authOptions.ts
-import  { AuthOptions } from "next-auth";
+import { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -16,6 +16,7 @@ export const authOptions: AuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
+
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -37,20 +38,23 @@ export const authOptions: AuthOptions = {
         if (!isValid) throw new Error("Invalid password");
 
         const userDoc = user as User & { _id: mongoose.Types.ObjectId };
+
         return {
           id: userDoc._id.toString(),
           email: user.email,
           username: user.username,
-          image: user.image,
+          image: user.image ?? "/default-avatar.png",
         };
       },
     }),
   ],
+
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "google") {
         await dbConnect();
         const existingUser = await UserModel.findOne({ email: user.email });
+
         if (!existingUser) {
           const username = user.name || user.email || "User";
 
@@ -61,44 +65,38 @@ export const authOptions: AuthOptions = {
             password: "", // Social login
           });
 
-          const emailComponent = React.createElement(RegistrationSuccess, {
-            username,
-          });
-
+          const emailComponent = React.createElement(RegistrationSuccess, { username });
           await sendEmail(user.email!, "Registration Successful", emailComponent);
         }
       }
       return true;
     },
-    async jwt({ token, user, account }) {
-      if (account?.provider === "google") {
-        await dbConnect();
-        const dbUser = await UserModel.findOne({ email: token.email });
 
-        if (dbUser) {
-          token.username = dbUser.username;
-          token.picture = dbUser.image ?? undefined;
-        }
-      } else if (user) {
-        token.sub = user.id;
-        token.email = user.email;
-        token.username = user.username;
-        token.picture = user.image ?? undefined;
-      }
+    async jwt({ token, user }) {
+  if (user) {
+    token.sub = user.id;
+    token.email = user.email;
+    token.username = user.username;
+    token.picture = user.image ?? "/default-avatar.png";
+  }
 
-      return token;
-    },
+  return token;
+},
+
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.sub as string;
+        session.user.email = token.email as string; // ✅ Now email will be passed to session
         session.user.username = token.username as string;
         session.user.image = token.picture as string;
       }
       return session;
     },
   },
+
   pages: {
     signIn: "/login",
   },
+
   secret: process.env.SECRET_KEY!,
 };

@@ -1,19 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ToastProvider, UIProvider } from "@jamsr-ui/react";
 import SessionWrapper from "@/components/SessionWrapper";
-import { SidebarNested } from "@/components/Sidebar";
+import {AuthProvider} from "@/context/AuthContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,22 +17,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" >
       <SessionWrapper>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          
         >
           <UIProvider>
             <ToastProvider />
-            <div className="flex flex-row h-screen">
-              <div>
-                <SidebarNested />
-              </div>
-              <div className=" flex justify-center items-center w-full h-full">
+            <AuthProvider>
+              
+              <div >
                 {/* Main content area */}
                 {children}
               </div>
-            </div>
+            </AuthProvider>
           </UIProvider>
         </body>
       </SessionWrapper>

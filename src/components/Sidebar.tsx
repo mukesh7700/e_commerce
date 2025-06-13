@@ -1,310 +1,144 @@
 "use client";
 
 import {
+  AddMemberIcon,
+  AnalyticsIcon,
+  CartIcon,
+  DashBordIcon,
+  MyReferralsIcon,
+  NetworkIcon,
+  OfferIcon,
+  OrderIcon,
+  PairIncomeIcon,
+  PlanIcon,
+  ProductsIcon,
+  ProfileIcon,
+  ReferralLinkIcon,
+  SupportIcon,
+  TotalTeamIcon,
+  TransactionIcon,
+  WithdrawMethodsIcon,
+} from "@/assets/svg";
+import {
   Avatar,
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-  Menu,
-  MenuItem,
-  Select,
-  SelectItem,
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuItemButton,
-  Text,
 } from "@jamsr-ui/react";
-import { ChevronRightIcon, EmailIcon } from "@jamsr-ui/shared-icons";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+ 
+interface SidebarUsageProps {
+  username: string;
+  email: string;
+  avatar?: string;
+}
 
-type NavItem = {
-  title: string;
-  icon?: React.ReactNode;
-  url?: string;
-  items?: NavItem[];
-};
 
-const navItems: NavItem[] = [
+const data = [
   {
-    title: "Platform",
+    title: "general",
     items: [
+      { title: "Dashboard", icon: <DashBordIcon className="h-6 w-6"/>, url: "/dashboard" },
+      { title: "Pair Income", icon: <PairIncomeIcon className="h-6 w-6"/>, url: "/pair-income" },
+      { title: "Offer", icon: <OfferIcon className="h-6 w-6" />, url: "/offers" },
+      { title: "Plan", icon: <PlanIcon className="h-6 w-6" />, url: "/plan" },
+      { title: "Products", icon: <ProductsIcon className="h-6 w-6" />, url: "/products" },
+      { title: "Cart", icon: <CartIcon className="h-6 w-6"/>, url: "/cart" },
+      { title: "Orders", icon: <OrderIcon className="h-6 w-6"/>, url: "/orders" },
+      { title: "Network", icon: <NetworkIcon className="h-6 w-6"/> },
       {
-        title: "Playground",
-        icon: <EmailIcon />,
-        items: [
-          {
-            title: "History",
-            url: "#",
-            items: [
-              {
-                title: "History",
-                url: "#",
-              },
-              {
-                title: "Starred",
-                url: "#",
-              },
-              {
-                title: "Settings",
-                url: "#",
-              },
-            ],
-          },
-          {
-            title: "Starred",
-            url: "#",
-          },
-          {
-            title: "Settings",
-            url: "#",
-          },
-        ],
+        title: "My Referrals",
+        icon: <MyReferralsIcon className="h-6 w-6" />,
+        url: "/my-referrals",
       },
+      { title: "Total Team", icon: <TotalTeamIcon className="h-6 w-6" />, url: "/total-team" },
+      { title: "Analytics", icon: <AnalyticsIcon className="h-6 w-6" />, url: "/analytics" },
+      { title: "Transaction", icon: <TransactionIcon className="h-6 w-6" />, url: "/transaction" },
       {
-        title: "Models",
-        icon: <EmailIcon />,
-        items: [
-          {
-            title: "Genesis",
-            url: "#",
-          },
-          {
-            title: "Explorer",
-            url: "#",
-          },
-          {
-            title: "Quantum",
-            url: "#",
-          },
-        ],
+        title: "Withdraw Methods",
+        icon: <WithdrawMethodsIcon className="h-6 w-6"/>,
+        url: "/withdraw",
       },
+      { title: "Profile", icon: <ProfileIcon className="h-6 w-6"/>, url: "/profile" },
+      { title: "Add_member", icon: <AddMemberIcon className="h-6 w-6" />, url: "/registration" },
       {
-        title: "Documentation",
-        icon: <EmailIcon />,
-        items: [
-          {
-            title: "Introduction",
-            url: "#",
-          },
-          {
-            title: "Get Started",
-            url: "#",
-          },
-          {
-            title: "Tutorials",
-            url: "#",
-          },
-          {
-            title: "Changelog",
-            url: "#",
-          },
-        ],
+        title: "Referral Link",
+        icon: <ReferralLinkIcon className="h-6 w-6" />,
+        url: "/referral-link",
       },
-      {
-        title: "Settings",
-        icon: <EmailIcon />,
-        items: [
-          {
-            title: "General",
-            url: "#",
-          },
-          {
-            title: "Team",
-            url: "#",
-          },
-          {
-            title: "Billing",
-            url: "#",
-          },
-          {
-            title: "Limits",
-            url: "#",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Projects",
-    items: [
-      {
-        title: "Design Engineering",
-        url: "#",
-        icon: <EmailIcon />,
-      },
-      {
-        title: "Sales & Marketing",
-        url: "#",
-        icon: <EmailIcon />,
-      },
-      {
-        title: "Travel",
-        url: "#",
-        icon: <EmailIcon />,
-      },
+      { title: "Support", icon: <SupportIcon className="h-6 w-6"/>, url: "/support" },
     ],
   },
 ];
 
-const data = {
-  user: {
-    name: "Jamsr World",
-    email: "jamsrworld@gmail.com",
-    avatar: "/avatar.png",
-  },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: null,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: null,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: null,
-      plan: "Free",
-    },
-  ],
-};
 
-const SidebarNestedMenuItem = (props: NavItem & { isNested?: boolean }) => {
-  const { icon, title, items = [], isNested } = props;
-  const hasChild = items.length > 0;
+
+export const SidebarUsage = ({username, email, avatar }:SidebarUsageProps) => {
+ 
+  const router = useRouter();
+  const pathname = usePathname();
+   
+  const isActive = (url:any) => {
+    return pathname === url;
+  };
+
+
+  
+   
   return (
-    <Collapsible isDisabled={!hasChild}>
-      <SidebarMenuItem className="group/collapsible relative">
-        {isNested && (
-          <div className="absolute -left-1 top-0 h-full w-px bg-content2" />
-        )}
-        <CollapsibleTrigger as={SidebarMenuItemButton}>
-          {icon}
-          {title}
-          {hasChild && (
-            <ChevronRightIcon className="ml-auto size-4 transition-transform duration-200 group-data-[expanded=true]/collapsible:rotate-90" />
-          )}
-        </CollapsibleTrigger>
-        {hasChild && (
-          <CollapsibleContent>
-            <SidebarMenu className="pl-2 pt-1">
-              {items.map((item, index) => (
-                <SidebarNestedMenuItem isNested key={index} {...item} />
+    <Sidebar className="w-[300px] border-e-1 border-dashed  border-gray-300 ">
+      <SidebarContent className="p-4">
+        {/* Logo */}
+        <div className="">
+          <div className="flex items-center gap-2 text-primary font-bold text-xl">
+            <Image height={50} width={200} src="/images/home/Logo.png" alt="logo" className="w-auto h-12  " />
+          </div>
+        </div>
+
+        {/* User Box */}
+        <div>
+          <div className="bg-gray-100 rounded-xl p-5 flex items-center gap-4 ">
+             <Avatar
+                  alt={username}
+                  width={150}
+                  height={150}
+                  src={avatar ?? ""}
+                />
+            <div >
+              <p className=" text-md capitalize">{username}</p>
+              <p className="max-w-[150px] truncate text-md text-gray-500">{email}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Menu Items */}
+        {data.map((group) => (
+          <SidebarGroup key={group.title}>
+            <SidebarGroupLabel className="uppercase text-md font-semibold">{group.title}</SidebarGroupLabel>
+            <SidebarMenu>
+              {group.items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItemButton  onClick={() => item.url && router.push(item.url)} className= {`text-md text-neutral-500 py-3 mb-1 ${isActive(item.url) ? "bg-green-50 text-green-500 font-semibold" : ""}`}>
+                    <span className="mr-4">{item.icon}</span>
+                    {item.title}
+                  </SidebarMenuItemButton>
+                </SidebarMenuItem>
               ))}
             </SidebarMenu>
-          </CollapsibleContent>
-        )}
-      </SidebarMenuItem>
-    </Collapsible>
-  );
-};
+          </SidebarGroup>
+        ))}
 
-export const SidebarNested = () => {
-  const { user, teams } = data;
-  return (
-    <Sidebar className="max-w-[250px]">
-      <SidebarHeader>
-        <Select
-          defaultValue={["Acme Inc"]}
-          renderValue={(value) => {
-            const selectedValue = value[0];
-            if (!selectedValue) return null;
-            const selectedItem = teams.find(
-              (item) => item.name === selectedValue,
-            );
-            if (!selectedItem) return null;
-            const { logo, name, plan } = selectedItem;
-            return (
-              <div className="flex items-center gap-2">
-                <Avatar src={logo} width={100} height={100} alt={name} />
-                <div className="flex flex-col text-left">
-                  <Text as="p" className="text-sm">
-                    {name}
-                  </Text>
-                  <Text as="p" className="text-xs text-foreground-secondary">
-                    {plan}
-                  </Text>
-                </div>
-              </div>
-            );
-          }}
-          classNames={{
-            trigger: "border-none hover:bg-content2 h-auto",
-          }}
-        >
-          {teams.map((item) => {
-            const { logo, name, plan } = item;
-            return (
-              <SelectItem key={name} value={name}>
-                <Avatar
-                  size="sm"
-                  src={logo}
-                  width={100}
-                  height={100}
-                  alt={name}
-                />
-                <div className="flex flex-col text-left">
-                  <Text as="p" className="text-sm">
-                    {name}
-                  </Text>
-                  <Text as="p" className="text-xs text-foreground-secondary">
-                    {plan}
-                  </Text>
-                </div>
-              </SelectItem>
-            );
-          })}
-        </Select>
-      </SidebarHeader>
-      <SidebarContent>
-        {navItems.map((item) => {
-          const { items = [], title } = item;
-          return (
-            <SidebarGroup key={title}>
-              <SidebarGroupLabel>{title}</SidebarGroupLabel>
-              <SidebarMenu>
-                {items.map((item) => {
-                  return <SidebarNestedMenuItem key={item.title} {...item} />;
-                })}
-              </SidebarMenu>
-            </SidebarGroup>
-          );
-        })}
+        {/* Version Footer */}
+        <div className="mt-auto text-lg text-center text-orange-500 ">
+          Jamsrmlm  <span className="text-gray-600  uppercase">v<sup >5</sup></span>
+        </div>
       </SidebarContent>
-      <SidebarFooter>
-        <Menu
-          trigger={
-            <div className="flex items-center gap-2">
-              <Avatar
-                src={user.avatar}
-                alt={user.name}
-                width={100}
-                height={100}
-              />
-              <div>
-                <Text as="p" className="text-sm">
-                  {user.name}
-                </Text>
-                <Text as="p" className="text-xs text-foreground-secondary">
-                  {user.email}
-                </Text>
-              </div>
-            </div>
-          }
-          placement="right-end"
-        >
-          <MenuItem>Settings</MenuItem>
-          <MenuItem>Profile</MenuItem>
-          <MenuItem>Logout</MenuItem>
-        </Menu>
-      </SidebarFooter>
     </Sidebar>
   );
 };
+export default SidebarUsage;

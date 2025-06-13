@@ -9,11 +9,15 @@ import Link from "next/link";
 import { loginSchema } from "@/schemas/loginSchema";
 import { signIn } from "next-auth/react";
 import { GoogleIcon, Logo } from "@/assets/svg";
+import { useAuth } from "@/context/AuthContext";
+
 
 type SignInFormData = z.infer<typeof loginSchema>;
 
 export default function SignInPage() {
   const router = useRouter();
+  const { setUser } = useAuth();
+
 
   const {
     register,
@@ -39,6 +43,7 @@ export default function SignInPage() {
       }
 
       toast.success("Login successful!");
+      setUser(result.user);
       router.push("/");
     } catch {
       toast.error("Network error, please try again");
